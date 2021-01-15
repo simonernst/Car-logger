@@ -40,7 +40,7 @@ class OBD_logger():
                 baro_pressure = self.connection.query(obd.commands.BAROMETRIC_PRESSURE)
 
                 if not speed.is_null():
-                    f.write("%d, %d, %d, %d, %d, %d, %d, %d" % (speed.time, speed.value, rpm.value, cool_temp.value, intake_temp.value, load.value, ambiant_air.value, baro_pressure.value))
+                    f.write("%d, %d, %d, %d, %d, %d, %d, %d \n" % (speed.time, speed.value, rpm.value, cool_temp.value, intake_temp.value, load.value, ambiant_air.value, baro_pressure.value))
 
         
 
@@ -49,7 +49,7 @@ class OBD_logger():
 
 if __name__=="__main__":
     
-    logitems = ["RPM", "SPEED", "COOLANT_TEMP", "INTAKE_TEMP", "AMBIANT_AIR_TEMP", "ENGINE_LOAD", "BAROMETRIC_PRESSURE"]
+    #logitems = ["RPM", "SPEED", "COOLANT_TEMP", "INTAKE_TEMP", "AMBIANT_AIR_TEMP", "ENGINE_LOAD", "BAROMETRIC_PRESSURE"]
     
     #TODO : change filepath to username + current_directory
     #TODO : add path check
