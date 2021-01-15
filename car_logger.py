@@ -7,11 +7,7 @@ import getpass
 obd.logger.removeHandler(obd.console_handler)
 class OBD_logger():
     def __init__(self, path):
-        #Create log_files according to datetime
-        print('Init')
-
         self.path = path
-
 
     def connect(self):
 
@@ -20,7 +16,6 @@ class OBD_logger():
             if not self.connection.is_connected():
                 print("Failed to connect, will try again")
                 time.sleep(5)
-                break
             else:
                 print("Connected")
                 break
@@ -32,8 +27,7 @@ class OBD_logger():
         with open(filename, "w", 128) as f:
 
             #Write the first line 
-            f.write("%s, %s, %s, %s, %s, %s, %s, %s" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
-            f.write("%s, %s, %s, %s, %s, %s, %s, %s" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
+            f.write("%s, %s, %s, %s, %s, %s, %s, %s \n" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
 
             while True:
                 
@@ -56,7 +50,10 @@ class OBD_logger():
 if __name__=="__main__":
     
     logitems = ["RPM", "SPEED", "COOLANT_TEMP", "INTAKE_TEMP", "AMBIANT_AIR_TEMP", "ENGINE_LOAD", "BAROMETRIC_PRESSURE"]
-    filepath = '/home/simon/test/project/log/'
+    
+    #TODO : change filepath to username + current_directory
+    #TODO : add path check
+    filepath = '/home/simon/207-logger/log/'
     o = OBD_logger(filepath)
     o.connect()
     o.record()
