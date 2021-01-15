@@ -18,6 +18,6 @@ python3 car_logger.py
 
 # TO DO
 
-- [] Add args for log_file location
-- [] Add tutorial for runnning script at boot time
+- [ ] Add args for log_file location
+- [ ] Add tutorial for runnning script at boot time
 
