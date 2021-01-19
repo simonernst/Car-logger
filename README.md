@@ -6,6 +6,7 @@ Mise en place d'un programme python permettant de récupérer et d'analyser diff
 
 python3 -m install obd
 
+install statistics, matplotlib
 
 ### Running
 
