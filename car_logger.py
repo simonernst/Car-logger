@@ -27,7 +27,21 @@ class OBD_logger():
         with open(filename, "w", 128) as f:
 
             #Write the first line 
-            f.write("%s, %s, %s, %s, %s, %s, %s, %s \n" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
+            f.write("%s,%s,%s,%s,%s,%s,%s,%s \n" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
+
+
+            #TODO : check if the car is able to answer on specific PIDs
+            # then, add true to some flags on the different commands in the while True loop
+
+
+
+
+
+
+
+
+            #TODO : add car info at the beginning of the log file
+            #e.g car model, DTCs, fuel type
 
             while True:
                 
@@ -40,8 +54,10 @@ class OBD_logger():
                 baro_pressure = self.connection.query(obd.commands.BAROMETRIC_PRESSURE)
 
                 if not speed.is_null():
-                    f.write("%d, %d, %d, %d, %d, %d, %d, %d \n" % (speed.time, speed.value, rpm.value, cool_temp.value, intake_temp.value, load.value, ambiant_air.value, baro_pressure.value))
-
+                    f.write("%d, %d, %d, %d, %d, %d, %d, %d \n" % (speed.time, speed.value.magnitude, rpm.value.magnitude, cool_temp.value.magnitude, intake_temp.value.magnitude, load.value.magnitude, ambiant_air.value.magnitude, baro_pressure.value.magnitude))
+                
+                #write to file after each call on file.write()
+                f.flush()
         
 
 
