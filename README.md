@@ -19,8 +19,5 @@ python3 log_reader.py
 
 - [ ] Add args for log_file location
 - [ ] Add tutorial for runnning script at boot time
-<<<<<<< HEAD
 - [ ] Add fancy images
-=======
 - [ ] Add hardware setup for logging
->>>>>>> 0fe908bbf05cd44f054f2115bae81636f42d2902
