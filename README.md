@@ -19,7 +19,7 @@ python3 car_logger.py
 
 python3 log_reader.py
 
-![plot](./images/plot.png)
+![plot](./images/temp.png)
 
 ### TO DO
 
