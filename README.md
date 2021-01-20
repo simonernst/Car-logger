@@ -19,6 +19,8 @@ python3 car_logger.py
 
 python3 log_reader.py
 
+![plot](./images/plot.png)
+
 ### TO DO
 
 - [ ] Add args for log_file location
