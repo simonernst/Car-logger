@@ -20,17 +20,17 @@ class log_parser:
     def mean(self, list):
          """
 #check if NULL bytes in file and erase them
-f = open("log/car-2021-1-19-11-42-30.log", "rb")
+f = open("log/car-2021-1-19-11-42-30.log", "r")
 raw_logfile = f.read()
 f.close()
-fo = open("log/car-2021-1-19-11-42-30.log", "wb")
+fo = open("log/car-2021-1-19-11-42-30.log", "w")
 fo.write(raw_logfile.replace('\x00', ''))
 fo.close()
 
 
 
-with open('log/car-2021-1-19-11-42-30.log', 'r') as logfile:
-    has_header = csv.Sniffer().has_header(logfile.read(1024))
+with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
+    has_header = csv.Sniffer().sniff(logfile.readline())
     
     #set csv config 
     delimiter = '\t'
