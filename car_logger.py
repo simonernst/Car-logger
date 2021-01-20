@@ -21,51 +21,83 @@ class OBD_logger():
                 break
 
     def record(self):
+
         localtime = time.localtime(time.time())
-        filename = self.path+"car-"+str(localtime[0])+"-"+str(localtime[1])+"-"+str(localtime[2])+"-"+str(localtime[3])+"-"+str(localtime[4])+"-"+str(localtime[5])+".log"
-        print('Start recording')
+        filename = self.path+"car-"+str(localtime[0])+"-"+str(localtime[1])+"-"+str(localtime[2])+"-"+str(localtime[3])+"-"+str(localtime[4])+"-"+str(localtime[5])+".log"   
+        list_ukn, list_pid, list_all = [], [], []
+
+        #Get all the PID commands supported by the car
+        supported_commands = self.connection.supported_commands
+
+        #Reads the supported commands and parse them into 3 categories
+        for c in supported_commands:
+            if c.ecu == 1:
+                list_ukn.append(c.name)
+            elif c.ecu == 2 and "PID" not in c.name:
+                list_pid.append(c.name)
+            else:
+                list_all.append(c.name)
+
+    
+        if(len(list_pid) == 0):
+            print("No pid 01 commands are supported, abort...")
+            self.connection.close()
+            return
+
+        #Opens the logfile to write all the relevant infos in it
         with open(filename, "w", 128) as f:
 
-            #Write the first line 
-            f.write("%s,%s,%s,%s,%s,%s,%s,%s \n" % ("Time", "Speed", "RPM", "Cool_temp", "Intake_temp", "Load", "Ambiant air", "Baro pressure"))
+            #TODO: check how DTCs are returned and find a way to store it in csv
+            """
+            #Read the DTCs on the car 
+            dtc = self.connection.query(obd.commands["GET_DTC"])
+            if not dtc.is_null():
+                f.write("DTC: %s \n" % dtc.value.magnitude)
+            """
+            #Read the VIN of the car
+            try:
+                vin = self.connection.query(obd.commands["VIN"])          
+                if not vin.is_null():
+                    f.write("VIN: %s \n" % vin.value.magnitude)
+            except:
+                f.write("VIN: unknown\n")
 
+            #Read the fuel type
+            if "FUEL_TYPE" in list_pid:
+                fuel = self.connection.query(obd.command["FUEL_TYPE"])
+                f.write("Fuel type: %s \n" % fuel.value.magnitude)
+            else: 
+                f.write("Fuel type: unknown \n")
 
-            #TODO : check if the car is able to answer on specific PIDs
-            # then, add true to some flags on the different commands in the while True loop
+            f.write("Time, ")
+            for element in list_pid:
+                f.write(str(element))
+                if element != list_pid[-1]:
+                    f.write(',')
+                else:
+                    f.write('\n')
 
-
-
-
-
-
+                speed = self.connection.query(obd.commands[element])
 
 
             #TODO : add car info at the beginning of the log file
             #e.g car model, DTCs, fuel type
 
+            print('Start recording...')
             while True:
-                
-                speed = self.connection.query(obd.commands.SPEED)
-                rpm = self.connection.query(obd.commands.RPM)
-                cool_temp = self.connection.query(obd.commands.COOLANT_TEMP)
-                intake_temp = self.connection.query(obd.commands.INTAKE_TEMP)
-                load = self.connection.query(obd.commands.ENGINE_LOAD)
-                ambiant_air = self.connection.query(obd.commands.AMBIANT_AIR_TEMP)
-                baro_pressure = self.connection.query(obd.commands.BAROMETRIC_PRESSURE)
+                f.write("%d," % self.connection.query(obd.commands[list_pid[0]]).time)
 
-                if not speed.is_null():
-                    f.write("%d, %d, %d, %d, %d, %d, %d, %d \n" % (speed.time, speed.value.magnitude, rpm.value.magnitude, cool_temp.value.magnitude, intake_temp.value.magnitude, load.value.magnitude, ambiant_air.value.magnitude, baro_pressure.value.magnitude))
-                
-                #write to file after each call on file.write()
-                f.flush()
-        
-
-
+                for element in list_pid:                    
+                    f.write("%d" % self.connection.query(obd.commands[element]).value.magnitude)
+                    if element != list_pid[-1]:
+                        f.write(',')
+                    else:
+                        f.write('\n')
 
 
 if __name__=="__main__":
     
-    #logitems = ["RPM", "SPEED", "COOLANT_TEMP", "INTAKE_TEMP", "AMBIANT_AIR_TEMP", "ENGINE_LOAD", "BAROMETRIC_PRESSURE"]
+    
     
     #TODO : change filepath to username + current_directory
     #TODO : add path check
