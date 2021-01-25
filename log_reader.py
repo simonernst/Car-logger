@@ -20,16 +20,16 @@ class log_parser:
     def mean(self, list):
          """
 #check if NULL bytes in file and erase them
-f = open("log/car-2021-1-19-11-42-30.log", "r")
+f = open("log/car-2021-1-21-7-2-51.log", "r")
 raw_logfile = f.read()
 f.close()
-fo = open("log/car-2021-1-19-11-42-30.log", "w")
+fo = open("log/car-2021-1-21-7-2-51.log", "w")
 fo.write(raw_logfile.replace('\x00', ''))
 fo.close()
 
 
 
-with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
+with open('log/car-2021-1-21-7-2-51.log', 'r', newline="\n") as logfile:
     has_header = csv.Sniffer().sniff(logfile.readline())
     
     #set csv config 
@@ -54,7 +54,7 @@ with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
         next(reader)  # Skip header row.
 
     dico = {}
-
+    print(ncol)
     for i in range(0, ncol):
         #reset to line 1
         logfile.seek(0)
@@ -66,7 +66,7 @@ with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
 
         dico["{0}".format(list_header[i])] = list_stuff
 
-    speed = dico['Speed']
+    speed = dico['SPEED']
 
     time = dico['Time']
     start_time = time[0]
@@ -78,10 +78,10 @@ with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
     start_time = time[0]
     print(start_time)
 
-    load=dico['Load']
+    load=dico['ENGINE_LOAD']
     total_time = (max(time)-min(time))/60
     rpm = dico['RPM']
-    cool_temp = dico['Cool_temp']
+    cool_temp = dico['COOLANT_TEMP']
 
     print("Vitesse moyenne: %.2f km/h" % statistics.mean(speed))
     print("Vitesse maximale: %.2f km/h" % max(speed))
@@ -94,30 +94,40 @@ with open('log/car-2021-1-19-11-42-30.log', 'r', newline="\n") as logfile:
     #fig.set_title("Some data from my car")
     
     
-    ax = fig.add_subplot(221)
+    ax = fig.add_subplot(331)
     ax.plot(time, speed)
-    ax2 = fig.add_subplot(222)
+    ax2 = fig.add_subplot(332)
     ax2.plot(time, load)
-    ax3 = fig.add_subplot(223)
+    ax3 = fig.add_subplot(333)
     ax3.plot(time,cool_temp)
-    ax4 = fig.add_subplot(224)
+    ax4 = fig.add_subplot(334)
+    ax4.plot(time,rpm)
+    ax3 = fig.add_subplot(333)
+    ax3.plot(time,cool_temp)
+    ax4 = fig.add_subplot(334)
     ax4.plot(time,rpm)
 
     ax.set_title('Vitesse')
     ax2.set_title('Charge moteur')
     ax3.set_title('Temp liquide de refroidissement')
     ax4.set_title('Vitesse moteur')
-
+    ax5.set_title('')
+    ax5.set_title('')
 
     ax.set_xlabel('time (second)')
     ax2.set_xlabel('time (second)')
     ax3.set_xlabel('time (second)')
     ax4.set_xlabel('time (second)')
+    ax5.set_xlabel('')
+    ax5.set_xlabel('')
 
     ax.set_ylabel('Vitesse (km/h)')
     ax2.set_ylabel('charge (%)')
     ax3.set_ylabel('T coolant (C)')
     ax4.set_ylabel('Rpm (Tr/min)')
+    ax5.set_ylabel('')
+    ax5.set_ylabel('')
+
     fig.set_size_inches(18.5, 10.5)   
     fig.savefig('temp.png', dpi=200)
 
