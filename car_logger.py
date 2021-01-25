@@ -37,8 +37,11 @@ class OBD_logger():
                 list_pid.append(c.name)
             else:
                 list_all.append(c.name)
+        for x in list_pid:
+            if "DTC" in x:
+                list_pid.remove(x)
 
-    
+        print(list_pid)
         if(len(list_pid) == 0):
             print("No pid 01 commands are supported, abort...")
             self.connection.close()
@@ -87,8 +90,11 @@ class OBD_logger():
             while True:
                 f.write("%d," % self.connection.query(obd.commands[list_pid[0]]).time)
 
-                for element in list_pid:                    
-                    f.write("%d" % self.connection.query(obd.commands[element]).value.magnitude)
+                for element in list_pid:
+                    try :
+                        f.write("%d" % self.connection.query(obd.commands[element]).value.magnitude)
+                    except:
+                        f.write('0')
                     if element != list_pid[-1]:
                         f.write(',')
                     else:
