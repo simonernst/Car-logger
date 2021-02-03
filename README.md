@@ -20,6 +20,7 @@ python3 car_logger.py
 python3 log_reader.py
 ```
 
+### Example output
 
 ![plot](./images/temp.png)
 
