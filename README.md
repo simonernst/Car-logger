@@ -2,7 +2,8 @@
 
 ### Description
 
-TO-DO
+Python project using OBD library to log all data from a vehicle sensors through the OBD II port.
+These data can be further analyzed and be nicely output to a png file.
 
 
 ### Installation
