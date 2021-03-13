@@ -8,10 +8,15 @@ These data can be further analyzed and be nicely output to a png file.
 
 ### Installation
 ```bash
-python3 -m install obd
-python3 -m install matplotlib
-python3 -m install statistics
+python3 -m pip install obd
+python3 -m pip install matplotlib
+python3 -m pip install statistics
 ```
+If you can't connect to the OBD, you must add dialout to your user :
+```bash
+sudo adduser $USER dialout
+```
+
 ### Running the logger
 ```bash
 python3 car_logger.py
@@ -20,6 +25,7 @@ python3 car_logger.py
 ```bash
 python3 log_reader.py
 ```
+
 
 ### Example output
 
